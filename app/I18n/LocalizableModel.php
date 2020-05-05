@@ -90,14 +90,35 @@ abstract class LocalizableModel extends Model
         // for the current locale
         foreach ($this->localizable as $localizableAttribute) {
             if (in_array($attribute, $this->localizable)) {
-                return $this->translations
-                    ->where('locale', app()->getLocale())
-                    ->first()
-                    ->{$localizableAttribute};
+
+                return $this->getLocalizableAttribute($localizableAttribute);
             }
         }
 
         return parent::__get($attribute);
+    }
+
+    /**
+     * Get localizable attribute
+     *
+     *
+     * @param [type] $localizableAttribute
+     * @return void
+     */
+    private function getLocalizableAttribute($localizableAttribute)
+    {
+        // if don't have any translations
+        if ($this->translations->count() == 0) {
+            return null;
+        }
+
+        $localizable = $this->translations
+            ->where('locale', app()->getLocale())
+            ->first();
+
+        return empty($localizable) ? $this->translations
+            ->first()
+            ->{$localizableAttribute} : $localizable->{$localizableAttribute};
     }
 
 
