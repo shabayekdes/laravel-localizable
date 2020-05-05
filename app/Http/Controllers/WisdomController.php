@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Wisdom;
+use Illuminate\Http\Request;
+use App;
 
 class WisdomController extends Controller
 {
@@ -24,6 +25,7 @@ class WisdomController extends Controller
      */
     public function index()
     {
+        // App::setLocale('ar');
         $wisdoms = Wisdom::all();
 
         return view('wisdoms', compact('wisdoms'));
